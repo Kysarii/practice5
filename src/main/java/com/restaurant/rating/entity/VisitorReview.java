@@ -1,6 +1,5 @@
 package com.restaurant.rating.entity;
 
-
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -13,6 +12,8 @@ import lombok.Builder;
 @Builder
 public class VisitorReview {
     private Long id;
+    @NonNull
+    private Long visitorId;
     @NonNull
     private Long restaurantId;
     @NonNull
