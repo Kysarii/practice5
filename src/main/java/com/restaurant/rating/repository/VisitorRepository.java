@@ -29,15 +29,33 @@ public class VisitorRepository {
         return visitor;
     }
 
-    public boolean remove(Visitor visitor) {
-        if (visitor == null) {
-            return  false;
+    public boolean removeById(Long id) {
+        Visitor visitorToRemove = findById(id);
+        if (visitorToRemove != null) {
+            return visitors.remove(visitorToRemove);
         }
-        return visitors.remove(visitor);
+        return false;
     }
 
     public List<Visitor> findAll(){
         return new ArrayList<>(visitors);
     }
 
+    public Visitor findById(Long id){
+        return visitors.stream()
+                .filter(visitor -> visitor.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Visitor updateVisitor(Long id, Visitor updatedVisitor) {
+        Visitor oldVisitor = findById(id);
+        if (oldVisitor == null) {
+            throw new IllegalArgumentException("Посетитель с id " + id + " не найден");
+        }
+        oldVisitor.setName(updatedVisitor.getName());
+        oldVisitor.setAge(updatedVisitor.getAge());
+        oldVisitor.setGender(updatedVisitor.getGender());
+        return oldVisitor;
+    }
 }

@@ -30,11 +30,12 @@ public class VisitorReviewRepository {
         return review;
     }
 
-    public boolean remove(VisitorReview review) {
-        if (review == null) {
-            return false;
+    public boolean removeById(Long id) {
+        VisitorReview visitorReviewToRemove = findById(id);
+        if (visitorReviewToRemove != null) {
+            return reviews.remove(visitorReviewToRemove);
         }
-        return reviews.remove(review);
+        return false;
     }
 
     public List<VisitorReview> findAll(){
@@ -52,6 +53,18 @@ public class VisitorReviewRepository {
         return reviews.stream()
                 .filter(review -> review.getRestaurantId().equals(restaurantId))
                 .collect(Collectors.toList());
+    }
+
+    public VisitorReview updateVisitorReviewById(Long id, VisitorReview updatedVisitorReview) {
+        VisitorReview oldVisitorReview = findById(id);
+        if (oldVisitorReview == null) {
+            throw new IllegalArgumentException("Отзыв посетителя с id " + id + " не найден");
+        }
+        oldVisitorReview.setRestaurantId(updatedVisitorReview.getRestaurantId());
+        oldVisitorReview.setRating(updatedVisitorReview.getRating());
+        oldVisitorReview.setReview(updatedVisitorReview.getReview());
+
+        return oldVisitorReview;
     }
 
 }

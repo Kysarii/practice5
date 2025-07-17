@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Repository
 public class RestaurantRepository {
@@ -16,22 +14,8 @@ public class RestaurantRepository {
         if (restaurant == null) {
             throw new IllegalArgumentException("Ресторан не может быть null");
         }
-
-        if (restaurant.getId() != null) {
-            Optional<Restaurant> optionalRestaurant = restaurants.stream()
-                    .filter(rest -> Objects.equals(rest.getId(), restaurant.getId()))
-                    .findFirst();
-
-            if (optionalRestaurant.isPresent()) {
-                optionalRestaurant.get().setUserRating(restaurant.getUserRating());
-                return optionalRestaurant.get();
-            } else {
-                throw new IllegalStateException("Ресторан с таким ID не найден");
-            }
-        } else {
-            if (restaurants.contains(restaurant)) {
-                throw new IllegalStateException("Такой Ресторан уже существует");
-            }
+        if (restaurants.contains(restaurant)) {
+            throw new IllegalStateException("Ресторан с таким id уже существует");
         }
         if (restaurants.isEmpty()) {
             restaurant.setId(0L);
@@ -43,11 +27,12 @@ public class RestaurantRepository {
         return restaurant;
     }
 
-    public boolean remove(Restaurant restaurant) {
-        if (restaurant == null) {
-            return false;
+    public boolean removeById(Long id) {
+        Restaurant restaurantToRemove = findById(id);
+        if (restaurantToRemove != null) {
+            return restaurants.remove(restaurantToRemove);
         }
-        return restaurants.remove(restaurant);
+        return false;
     }
 
     public List<Restaurant> findAll() {
@@ -59,5 +44,19 @@ public class RestaurantRepository {
                 .filter(restaurant -> restaurant.getId().equals(restaurantId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Restaurant updateRestaurant(Long id, Restaurant updatedRestaurant) {
+        Restaurant oldRestaurant = findById(id);
+        if (oldRestaurant == null) {
+            throw new IllegalArgumentException("Ресторан с id:  " + id + " не найден");
+        }
+        oldRestaurant.setRestaurantName(updatedRestaurant.getRestaurantName());
+        oldRestaurant.setDescription(updatedRestaurant.getDescription());
+        oldRestaurant.setKitchenType(updatedRestaurant.getKitchenType());
+        oldRestaurant.setAverageCheck(updatedRestaurant.getAverageCheck());
+        oldRestaurant.setUserRating(updatedRestaurant.getUserRating());
+
+        return oldRestaurant;
     }
 }

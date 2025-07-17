@@ -1,8 +1,7 @@
 package com.restaurant.rating.config;
 
-import com.restaurant.rating.entity.Restaurant;
-import com.restaurant.rating.entity.Visitor;
-import com.restaurant.rating.entity.VisitorReview;
+import com.restaurant.rating.dto.request.RestaurantRequestDTO;
+import com.restaurant.rating.dto.request.VisitorRequestDTO;
 import com.restaurant.rating.enums.Gender;
 import com.restaurant.rating.enums.KitchenType;
 import com.restaurant.rating.service.RestaurantService;
@@ -27,78 +26,80 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        Restaurant restaurant1 = Restaurant.builder()
-                .restaurantName("Вкусно - и точка")
-                .description("Фастфуд")
-                .kitchenType(KitchenType.AMERICAN)
-                .averageCheck(700.0)
-                .userRating(BigDecimal.ZERO)
-                .build();
-        restaurantService.saveRestaurant(restaurant1);
+        RestaurantRequestDTO restaurant1Dto = new RestaurantRequestDTO(
+                "Вкусно - и точка",
+                "Фастфуд",
+                KitchenType.AMERICAN,
+                700.0,
+                BigDecimal.ZERO
+        );
+        restaurantService.saveRestaurant(restaurant1Dto);
 
-        Restaurant restaurant2 = Restaurant.builder()
-                .restaurantName("Restaurant Mont Blanc")
-                .kitchenType(KitchenType.EUROPEAN)
-                .averageCheck(950.0)
-                .userRating(BigDecimal.ZERO)
-                .build();
-        restaurantService.saveRestaurant(restaurant2);
+        RestaurantRequestDTO restaurant2Dto = new RestaurantRequestDTO(
+                "Restaurant Mont Blanc",
+                null,
+                KitchenType.EUROPEAN,
+                950.0,
+                BigDecimal.ZERO
+        );
+        restaurantService.saveRestaurant(restaurant2Dto);
 
-        Restaurant restaurant3 = Restaurant.builder()
-                .restaurantName("Шаурма бистро")
-                .description("Быстрое питание")
-                .kitchenType(KitchenType.RUSSIAN)
-                .averageCheck(300.0)
-                .userRating(BigDecimal.ZERO)
-                .build();
-        restaurantService.saveRestaurant(restaurant3);
+        RestaurantRequestDTO restaurant3Dto = new RestaurantRequestDTO(
+                "Шаурма бистро",
+                "Быстрое питание",
+                KitchenType.RUSSIAN,
+                300.0,
+                BigDecimal.ZERO
+        );
+        restaurantService.saveRestaurant(restaurant3Dto);
 
-        Visitor visitor1 = Visitor.builder()
-                .name("Геннадий")
-                .age(26)
-                .gender(Gender.MALE)
-                .build();
-        visitorService.saveVisitor(visitor1);
+        VisitorRequestDTO visitor1Dto = new VisitorRequestDTO(
+                "Геннадий",
+                26,
+                Gender.MALE
+        );
+        visitorService.saveVisitor(visitor1Dto);
 
-        Visitor visitor2 = Visitor.builder()
-                .name("Мария")
-                .age(19)
-                .gender(Gender.FEMALE)
-                .build();
-        visitorService.saveVisitor(visitor2);
+        VisitorRequestDTO visitor2Dto = new VisitorRequestDTO(
+                "Мария",
+                19,
+                Gender.FEMALE
+        );
+        visitorService.saveVisitor(visitor2Dto);
 
-        Visitor visitor3 = Visitor.builder()
-                .age(43)
-                .gender(Gender.FEMALE)
-                .build();
-        visitorService.saveVisitor(visitor3);
+        VisitorRequestDTO visitor3Dto = new VisitorRequestDTO(
+                null,
+                43,
+                Gender.FEMALE
+        );
+        visitorService.saveVisitor(visitor3Dto);
 
-        VisitorReview visitorReview1 = VisitorReview.builder()
-                .restaurantId(restaurant1.getId())
-                .rating(4)
-                .review("Котлета успела остыть")
-                .build();
-        visitorReviewService.saveVisitorReview(visitorReview1);
-
-        VisitorReview visitorReview2 = VisitorReview.builder()
-                .restaurantId(restaurant2.getId())
-                .rating(5)
-                .review("Все было шикарно")
-                .build();
-        visitorReviewService.saveVisitorReview(visitorReview2);
-
-        VisitorReview visitorReview3 = VisitorReview.builder()
-                .restaurantId(restaurant3.getId())
-                .rating(3)
-                .build();
-        visitorReviewService.saveVisitorReview(visitorReview3);
-
-        VisitorReview visitorReview4 = VisitorReview.builder()
-                .restaurantId(restaurant3.getId())
-                .rating(5)
-                .review("Вкуснейшая шаурма")
-                .build();
-        visitorReviewService.saveVisitorReview(visitorReview4);
+        //VisitorReview visitorReview1 = VisitorReview.builder()
+        //        .restaurantId(restaurant1Dto.id())
+        //        .rating(4)
+        //        .review("Котлета успела остыть")
+        //        .build();
+        //visitorReviewService.saveVisitorReview(visitorReview1);
+//
+        //VisitorReview visitorReview2 = VisitorReview.builder()
+        //        .restaurantId(restaurant2Dto.id())
+        //        .rating(5)
+        //        .review("Все было шикарно")
+        //        .build();
+        //visitorReviewService.saveVisitorReview(visitorReview2);
+//
+        //VisitorReview visitorReview3 = VisitorReview.builder()
+        //        .restaurantId(restaurant3Dto.id())
+        //        .rating(3)
+        //        .build();
+        //visitorReviewService.saveVisitorReview(visitorReview3);
+//
+        //VisitorReview visitorReview4 = VisitorReview.builder()
+        //        .restaurantId(restaurant3Dto.id())
+        //        .rating(5)
+        //        .review("Вкуснейшая шаурма")
+        //        .build();
+        //visitorReviewService.saveVisitorReview(visitorReview4);
 
         System.out.println("---Данные инициализированны с помощью @PostConstruct---");
     }
