@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20250718-create-visitor-table
+      author: kysarii
+      preConditions:
+        - onFail: HALT
+          not:
+            tableExists:
+              tableName: visitor
+      changes:
+        - createTable:
+            tableName: visitor
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: age
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gender
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: visitor
+            columns:
+              - column:
+                  name: name
+                  value: Марина
+              - column:
+                  name: age
+                  value: "35"
+              - column:
+                  name: gender
+                  value: FEMALE
+        - insert:
+            tableName: visitor
+            columns:
+              - column:
+                  name: name
+                  value: Александр
+              - column:
+                  name: age
+                  value: "20"
+              - column:
+                  name: gender
+                  value: MALE
+        - insert:
+            tableName: visitor
+            columns:
+              - column:
+                  name: name
+                  value: Илья
+              - column:
+                  name: age
+                  value: "27"
+              - column:
+                  name: gender
+                  value: MALE
+        - insert:
+            tableName: visitor
+            columns:
+              - column:
+                  name: age
+                  value: "16"
+              - column:
+                  name: gender
+                  value: FEMALE
+        - insert:
+            tableName: visitor
+            columns:
+              - column:
+                  name: age
+                  value: "18"
+              - column:
+                  name: gender
+                  value: MALE
+      rollback:
+        - dropTable:
+            tableName: visitor

@@ -3,8 +3,10 @@ package com.restaurant.rating.dto.request;
 import com.restaurant.rating.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 
 @Schema(description = "DTO для создания/обновления посетителя")
+@Builder
 public record VisitorRequestDTO(
         @Schema(description = "Имя посетителя", example = "Иван Иванов")
         @NotBlank(message = "Имя не может быть пустым")

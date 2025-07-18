@@ -13,7 +13,7 @@ public record RestaurantResponseDTO (
 
         @Schema(description = "Название ресторана", example = "The Happy Bull")
         @NonNull
-        String restaurantName,
+        String name,
 
         @Schema(description = "Описание ресторана", example = "Бургеры и прочее")
         String description,

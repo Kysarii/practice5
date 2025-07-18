@@ -5,9 +5,6 @@ import lombok.NonNull;
 
 @Schema(description = "DTO ответа с информацией об отзыве посетителя")
 public record VisitorReviewResponseDTO(
-        @Schema(description = "Уникальный идентификатор отзыва")
-        Long id,
-
         @Schema(description = "ID посетителя")
         @NonNull
         Long visitorId,

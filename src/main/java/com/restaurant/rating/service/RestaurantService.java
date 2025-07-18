@@ -5,42 +5,48 @@ import com.restaurant.rating.dto.response.RestaurantResponseDTO;
 import com.restaurant.rating.entity.Restaurant;
 import com.restaurant.rating.entity.VisitorReview;
 import com.restaurant.rating.mapper.RestaurantMapper;
-import com.restaurant.rating.repository.RestaurantRepository;
-import com.restaurant.rating.repository.VisitorReviewRepository;
+import com.restaurant.rating.repository.RestaurantRepo;
+import com.restaurant.rating.repository.VisitorReviewRepo;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class RestaurantService {
-    private final RestaurantRepository restaurantRepository;
-    private final VisitorReviewRepository visitorReviewRepository;
+    private final RestaurantRepo restaurantRepo;
+    private final VisitorReviewRepo visitorReviewRepo;
     private final RestaurantMapper restaurantMapper;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, VisitorReviewRepository visitorReviewRepository, RestaurantMapper restaurantMapper) {
-        this.restaurantRepository = restaurantRepository;
-        this.visitorReviewRepository = visitorReviewRepository;
+    public RestaurantService(RestaurantRepo restaurantRepo, VisitorReviewRepo visitorReviewRepo, RestaurantMapper restaurantMapper) {
+        this.restaurantRepo = restaurantRepo;
+        this.visitorReviewRepo = visitorReviewRepo;
         this.restaurantMapper = restaurantMapper;
     }
 
+
     public RestaurantResponseDTO saveRestaurant(RestaurantRequestDTO requestDTO) {
         Restaurant restaurant = restaurantMapper.toEntity(requestDTO);
-        Restaurant saved = restaurantRepository.save(restaurant);
+        Restaurant saved = restaurantRepo.save(restaurant);
         return restaurantMapper.toDto(saved);
     }
 
     public boolean removeRestaurantById(Long id) {
-        return restaurantRepository.removeById(id);
+        if (restaurantRepo.existsById(id)) {
+            restaurantRepo.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     public List<RestaurantResponseDTO> findAllRestaurant() {
-        List<Restaurant> restaurants = restaurantRepository.findAll();
+        List<Restaurant> restaurants = restaurantRepo.findAll();
         return restaurantMapper.toDTOList(restaurants);
     }
 
     public BigDecimal recalculateRating(Long restaurantId) {
-        List<VisitorReview> visitorReviews = visitorReviewRepository.findByRestaurantId(restaurantId);
+        List<VisitorReview> visitorReviews = visitorReviewRepo.findByRestaurantId(restaurantId);
 
         BigDecimal newRating;
         if (visitorReviews.isEmpty()) {
@@ -56,25 +62,30 @@ public class RestaurantService {
     }
 
     public RestaurantResponseDTO updateRating(Long restaurantId, BigDecimal newRating) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId);
+        Restaurant restaurant = restaurantRepo.findById(restaurantId)
+                .orElseThrow(() -> new NoSuchElementException("Ресторан с id: " + restaurantId + " не найден"));
         restaurant.setUserRating(newRating);
-        Restaurant updated = restaurantRepository.updateRestaurant(restaurantId, restaurant);
+        Restaurant updated = restaurantRepo.save(restaurant);
         return restaurantMapper.toDto(updated);
     }
 
-    public Restaurant findRestaurantById(Restaurant restaurant) {
-        return restaurantRepository.findById(restaurant.getId());
-    }
-
     public RestaurantResponseDTO  getRestaurantById(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id);
+        Restaurant restaurant = restaurantRepo.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Ресторан с id: " + id + " не найден"));
         return restaurantMapper.toDto(restaurant);
     }
 
     public RestaurantResponseDTO updateRestaurantById(Long id, RestaurantRequestDTO requestDTO) {
-        Restaurant updatedRestaurant = restaurantMapper.toEntity(requestDTO);
-        Restaurant result = restaurantRepository.updateRestaurant(id, updatedRestaurant);
-        return restaurantMapper.toDto(result);
+        Restaurant exist = restaurantRepo.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Ресторан с id: " + id + " не найден"));
+        exist.setName(requestDTO.name());
+        exist.setDescription(requestDTO.description());
+        exist.setKitchenType(requestDTO.kitchenType());
+        exist.setAverageCheck(requestDTO.averageCheck());
+        exist.setUserRating(requestDTO.userRating());
+
+        Restaurant updated = restaurantRepo.save(exist);
+        return restaurantMapper.toDto(updated);
     }
 
 }
