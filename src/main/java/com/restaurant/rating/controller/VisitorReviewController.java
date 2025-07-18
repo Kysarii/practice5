@@ -2,16 +2,23 @@ package com.restaurant.rating.controller;
 
 import com.restaurant.rating.dto.request.VisitorReviewRequestDTO;
 import com.restaurant.rating.dto.response.VisitorReviewResponseDTO;
+import com.restaurant.rating.entity.Restaurant;
 import com.restaurant.rating.service.VisitorReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -26,9 +33,10 @@ public class VisitorReviewController {
     }
 
     @GetMapping
-    @Operation(summary = "Получить все отзывы", description = "Возвращает список всех отзывов посетителей")
-    public List<VisitorReviewResponseDTO> findAllVisitorReviews() {
-        return visitorReviewService.findAllVisitorReview();
+    @Operation(summary = "Получить все отзывы с пагинацией и сортировкой",
+            description = "Возвращает все отзывы с пагинацией, по умолчанию сначала самые высокие оценки")
+    public Page<VisitorReviewResponseDTO> findAllVisitorReviews(@PageableDefault(sort = "rating", direction = Sort.Direction.DESC) Pageable pageable ) {
+        return visitorReviewService.findAllVisitorReview(pageable);
     }
 
     @GetMapping("/visitor/{visitorId}/restaurant/{restaurantId}")
@@ -60,6 +68,13 @@ public class VisitorReviewController {
     @Operation(summary = "Удалить отзыв", description = "Удаляет отзыв по его ID")
     public void deleteVisitorReviewById(@PathVariable Long visitorId, @PathVariable Long restaurantId) {
         visitorReviewService.removeVisitorReview(visitorId, restaurantId);
+    }
+
+    @GetMapping("/restaurants-by-min-rating")
+    @Operation(summary = "Найти рестораны с рейтингом не меньше заданного",
+            description = "Возвращает список ресторанов, у которых рейтинг не меньше указанного значения")
+    public List<Restaurant> findRestaurantsByMinRating(@RequestParam BigDecimal minRating) {
+        return visitorReviewService.findRestaurantsByMinRating(minRating);
     }
 
 }

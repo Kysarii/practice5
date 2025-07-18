@@ -7,7 +7,6 @@ import com.restaurant.rating.entity.VisitorReview;
 import com.restaurant.rating.mapper.RestaurantMapper;
 import com.restaurant.rating.repository.RestaurantRepo;
 import com.restaurant.rating.repository.VisitorReviewRepo;
-import com.restaurant.rating.repository.VisitorReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -64,7 +63,7 @@ public class RestaurantService {
 
     public RestaurantResponseDTO updateRating(Long restaurantId, BigDecimal newRating) {
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
-                .orElseThrow(() -> new NoSuchElementException("Ресторан с id: " + restaurantId + " не найден"));;
+                .orElseThrow(() -> new NoSuchElementException("Ресторан с id: " + restaurantId + " не найден"));
         restaurant.setUserRating(newRating);
         Restaurant updated = restaurantRepo.save(restaurant);
         return restaurantMapper.toDto(updated);

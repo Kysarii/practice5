@@ -5,7 +5,6 @@ import com.restaurant.rating.dto.response.VisitorResponseDTO;
 import com.restaurant.rating.entity.Visitor;
 import com.restaurant.rating.mapper.VisitorMapper;
 import com.restaurant.rating.repository.VisitorRepo;
-import com.restaurant.rating.repository.VisitorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -10,9 +10,12 @@ import com.restaurant.rating.mapper.VisitorReviewMapper;
 import com.restaurant.rating.repository.RestaurantRepo;
 import com.restaurant.rating.repository.VisitorRepo;
 import com.restaurant.rating.repository.VisitorReviewRepo;
-import com.restaurant.rating.repository.VisitorReviewRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -63,9 +66,9 @@ public class VisitorReviewService {
         return false;
     }
 
-    public List<VisitorReviewResponseDTO> findAllVisitorReview(){
-        List<VisitorReview> visitorReviews = visitorReviewRepo.findAll();
-        return  visitorReviewMapper.toDtoList(visitorReviews);
+    public Page<VisitorReviewResponseDTO> findAllVisitorReview(Pageable pageable) {
+        Page<VisitorReview> visitorReviews = visitorReviewRepo.findAll(pageable);
+        return visitorReviews.map(visitorReviewMapper::toDto);
     }
 
     public VisitorReviewResponseDTO findVisitorReviewById(Long visitorId, Long restaurantId) {
@@ -84,6 +87,11 @@ public class VisitorReviewService {
 
         VisitorReview  updated = visitorReviewRepo.save(exist);
         return visitorReviewMapper.toDto(updated);
+    }
+
+    public List<Restaurant> findRestaurantsByMinRating(@RequestParam BigDecimal minRating) {
+        return restaurantRepo.findByUserRatingGreaterThanEqual(minRating);
+        //findRestaurantsWithRatingGreaterThanEqual через Query
     }
 
 }
