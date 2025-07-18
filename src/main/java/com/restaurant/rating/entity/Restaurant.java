@@ -1,11 +1,8 @@
 package com.restaurant.rating.entity;
 
 import com.restaurant.rating.enums.KitchenType;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NonNull;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,16 +10,28 @@ import java.math.BigDecimal;
 @Setter
 @EqualsAndHashCode(exclude = "id")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "restaurant")
 public class Restaurant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
-    private String restaurantName;
+
+    @Column(nullable = false)
+    private String name;
+
     private String description;
-    @NonNull
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private KitchenType kitchenType;
-    @NonNull
+
+    @Column(nullable = false)
     private Double averageCheck;
-    @NonNull
+
+    @Column(nullable = false)
     private BigDecimal userRating;
 
 }

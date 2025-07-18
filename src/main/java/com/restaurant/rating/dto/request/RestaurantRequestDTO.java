@@ -11,7 +11,7 @@ public record RestaurantRequestDTO(
         @Schema(description = "Название ресторана", example = "The Happy Bull")
         @NotBlank(message = "Название ресторана не может быть пустым")
         @Size(min = 2, max = 100, message = "Название ресторана должно содержать от 2 до 100 символов")
-        String restaurantName,
+        String name,
 
         @Schema(description = "Описание ресторана", example = "Бургеры и прочее")
         String description,

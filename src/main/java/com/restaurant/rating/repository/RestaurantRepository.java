@@ -51,7 +51,7 @@ public class RestaurantRepository {
         if (oldRestaurant == null) {
             throw new IllegalArgumentException("Ресторан с id:  " + id + " не найден");
         }
-        oldRestaurant.setRestaurantName(updatedRestaurant.getRestaurantName());
+        oldRestaurant.setName(updatedRestaurant.getName());
         oldRestaurant.setDescription(updatedRestaurant.getDescription());
         oldRestaurant.setKitchenType(updatedRestaurant.getKitchenType());
         oldRestaurant.setAverageCheck(updatedRestaurant.getAverageCheck());

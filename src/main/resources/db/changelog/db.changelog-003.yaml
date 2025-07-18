@@ -1,0 +1,134 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20250718-create-visitor_review-table
+      author: kysarii
+      preConditions:
+        - onFail: HALT
+          not:
+            tableExists:
+              tableName: visitor_review
+      changes:
+        - createTable:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: restaurant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: review
+                  type: varchar(1000)
+        - addPrimaryKey:
+            tableName: visitor_review
+            columnNames: visitor_id, restaurant_id
+            constraintName: pk_visitor_review
+        - addForeignKeyConstraint:
+            baseTableName: visitor_review
+            baseColumnNames: visitor_id
+            referencedTableName: visitor
+            referencedColumnNames: id
+            constraintName: fk_visitor_review_visitor
+        - addForeignKeyConstraint:
+            baseTableName: visitor_review
+            baseColumnNames: restaurant_id
+            referencedTableName: restaurant
+            referencedColumnNames: id
+            constraintName: fk_visitor_review_restaurant
+        - insert:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  value: "1"
+              - column:
+                  name: restaurant_id
+                  value: "1"
+              - column:
+                  name: rating
+                  value: "5"
+              - column:
+                  name: review
+                  value: Восхитительная паста!
+        - insert:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  value: "2"
+              - column:
+                  name: restaurant_id
+                  value: "2"
+              - column:
+                  name: rating
+                  value: "4"
+              - column:
+                  name: review
+                  value: За свою цену очень даже хорошо!
+        - insert:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  value: "3"
+              - column:
+                  name: restaurant_id
+                  value: "2"
+              - column:
+                  name: rating
+                  value: "1"
+              - column:
+                  name: review
+                  value: Ужасное отношение персонала к посетителям!
+        - insert:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  value: "4"
+              - column:
+                  name: restaurant_id
+                  value: "3"
+              - column:
+                  name: rating
+                  value: "5"
+        - insert:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  value: "5"
+              - column:
+                  name: restaurant_id
+                  value: "4"
+              - column:
+                  name: rating
+                  value: "4"
+        - insert:
+            tableName: visitor_review
+            columns:
+              - column:
+                  name: visitor_id
+                  value: "5"
+              - column:
+                  name: restaurant_id
+                  value: "5"
+              - column:
+                  name: rating
+                  value: "5"
+              - column:
+                  name: review
+                  value: Я будто в Мексику попал
+      rollback:
+        - dropTable:
+            tableName: visitor

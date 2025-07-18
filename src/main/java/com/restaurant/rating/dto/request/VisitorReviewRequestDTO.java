@@ -8,9 +8,6 @@ import jakarta.validation.constraints.Positive;
 
 @Schema(description = "DTO для создания/обновления отзыва посетителя")
 public record VisitorReviewRequestDTO(
-        //@Schema(description = "ID посетителя")
-        //@NotNull(message = "ID посетителя обязателен")
-        //@Positive(message = "ID посетителя должен быть положительным числом")
         Long visitorId,
 
         @Schema(description = "ID ресторана", example = "1")

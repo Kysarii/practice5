@@ -14,65 +14,65 @@ import java.math.BigDecimal;
 
 @Component
 public class DataInitializer {
-    private final RestaurantService restaurantService;
-    private final VisitorService visitorService;
-    private final VisitorReviewService visitorReviewService;
+    //private final RestaurantService restaurantService;
+    //private final VisitorService visitorService;
+    //private final VisitorReviewService visitorReviewService;
+//
+    //public DataInitializer(RestaurantService restaurantService, VisitorService visitorService, VisitorReviewService visitorReviewService) {
+    //    this.restaurantService = restaurantService;
+    //    this.visitorService = visitorService;
+    //    this.visitorReviewService = visitorReviewService;
+    //}
 
-    public DataInitializer(RestaurantService restaurantService, VisitorService visitorService, VisitorReviewService visitorReviewService) {
-        this.restaurantService = restaurantService;
-        this.visitorService = visitorService;
-        this.visitorReviewService = visitorReviewService;
-    }
-
-    @PostConstruct
-    public void init() {
-        RestaurantRequestDTO restaurant1Dto = new RestaurantRequestDTO(
-                "Вкусно - и точка",
-                "Фастфуд",
-                KitchenType.AMERICAN,
-                700.0,
-                BigDecimal.ZERO
-        );
-        restaurantService.saveRestaurant(restaurant1Dto);
-
-        RestaurantRequestDTO restaurant2Dto = new RestaurantRequestDTO(
-                "Restaurant Mont Blanc",
-                null,
-                KitchenType.EUROPEAN,
-                950.0,
-                BigDecimal.ZERO
-        );
-        restaurantService.saveRestaurant(restaurant2Dto);
-
-        RestaurantRequestDTO restaurant3Dto = new RestaurantRequestDTO(
-                "Шаурма бистро",
-                "Быстрое питание",
-                KitchenType.RUSSIAN,
-                300.0,
-                BigDecimal.ZERO
-        );
-        restaurantService.saveRestaurant(restaurant3Dto);
-
-        VisitorRequestDTO visitor1Dto = new VisitorRequestDTO(
-                "Геннадий",
-                26,
-                Gender.MALE
-        );
-        visitorService.saveVisitor(visitor1Dto);
-
-        VisitorRequestDTO visitor2Dto = new VisitorRequestDTO(
-                "Мария",
-                19,
-                Gender.FEMALE
-        );
-        visitorService.saveVisitor(visitor2Dto);
-
-        VisitorRequestDTO visitor3Dto = new VisitorRequestDTO(
-                null,
-                43,
-                Gender.FEMALE
-        );
-        visitorService.saveVisitor(visitor3Dto);
+    //@PostConstruct
+    //public void init() {
+    //    RestaurantRequestDTO restaurant1Dto = new RestaurantRequestDTO(
+    //            "Вкусно - и точка",
+    //            "Фастфуд",
+    //            KitchenType.AMERICAN,
+    //            700.0,
+    //            BigDecimal.ZERO
+    //    );
+    //    restaurantService.saveRestaurant(restaurant1Dto);
+//
+    //    RestaurantRequestDTO restaurant2Dto = new RestaurantRequestDTO(
+    //            "Restaurant Mont Blanc",
+    //            null,
+    //            KitchenType.EUROPEAN,
+    //            950.0,
+    //            BigDecimal.ZERO
+    //    );
+    //    restaurantService.saveRestaurant(restaurant2Dto);
+//
+    //    RestaurantRequestDTO restaurant3Dto = new RestaurantRequestDTO(
+    //            "Шаурма бистро",
+    //            "Быстрое питание",
+    //            KitchenType.RUSSIAN,
+    //            300.0,
+    //            BigDecimal.ZERO
+    //    );
+    //    restaurantService.saveRestaurant(restaurant3Dto);
+//
+    //    VisitorRequestDTO visitor1Dto = new VisitorRequestDTO(
+    //            "Геннадий",
+    //            26,
+    //            Gender.MALE
+    //    );
+    //    visitorService.saveVisitor(visitor1Dto);
+//
+    //    VisitorRequestDTO visitor2Dto = new VisitorRequestDTO(
+    //            "Мария",
+    //            19,
+    //            Gender.FEMALE
+    //    );
+    //    visitorService.saveVisitor(visitor2Dto);
+//
+    //    VisitorRequestDTO visitor3Dto = new VisitorRequestDTO(
+    //            null,
+    //            43,
+    //            Gender.FEMALE
+    //    );
+    //    visitorService.saveVisitor(visitor3Dto);
 
         //VisitorReview visitorReview1 = VisitorReview.builder()
         //        .restaurantId(restaurant1Dto.id())
@@ -101,7 +101,7 @@ public class DataInitializer {
         //        .build();
         //visitorReviewService.saveVisitorReview(visitorReview4);
 
-        System.out.println("---Данные инициализированны с помощью @PostConstruct---");
-    }
+        //System.out.println("---Данные инициализированны с помощью @PostConstruct---");
+    //}
 
 }

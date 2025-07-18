@@ -1,0 +1,130 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20250718-create-restaurant-table
+      author: kysarii
+      preConditions:
+        - onFail: HALT
+          not:
+            tableExists:
+              tableName: restaurant
+      changes:
+        - createTable:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(1000)
+              - column:
+                  name: kitchen_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: average_check
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_rating
+                  type: decimal(3,1)
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: name
+                  value: Пастафарианство
+              - column:
+                  name: description
+                  value: Ресторан вкуснейшей пасты.
+              - column:
+                  name: kitchen_type
+                  value: ITALIAN
+              - column:
+                  name: average_check
+                  value: "1500.00"
+              - column:
+                  name: user_rating
+                  value: "0.0"
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: name
+                  value: Суши бар
+              - column:
+                  name: description
+                  value: Свежие суши.
+              - column:
+                  name: kitchen_type
+                  value: JAPANESE
+              - column:
+                  name: average_check
+                  value: "900.00"
+              - column:
+                  name: user_rating
+                  value: "3.0"
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: name
+                  value: Макдональдс
+              - column:
+                  name: kitchen_type
+                  value: AMERICAN
+              - column:
+                  name: average_check
+                  value: "600.00"
+              - column:
+                  name: user_rating
+                  value: "0.0"
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: name
+                  value: Счастливый бык
+              - column:
+                  name: kitchen_type
+                  value: EUROPEAN
+              - column:
+                  name: average_check
+                  value: "750.00"
+              - column:
+                  name: user_rating
+                  value: "4.2"
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: name
+                  value: Сомбреро
+              - column:
+                  name: description
+                  value: Лучшие тортильти.
+              - column:
+                  name: kitchen_type
+                  value: MEXICAN
+              - column:
+                  name: average_check
+                  value: "425.50"
+              - column:
+                  name: user_rating
+                  value: "3.9"
+      rollback:
+        - dropTable:
+            tableName: visitor

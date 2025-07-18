@@ -31,10 +31,10 @@ public class VisitorReviewController {
         return visitorReviewService.findAllVisitorReview();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/visitor/{visitorId}/restaurant/{restaurantId}")
     @Operation(summary = "Получить отзыв по ID", description = "Возвращает информацию об отзыве по его ID")
-    public VisitorReviewResponseDTO findVisitorReviewById(@PathVariable Long id) {
-        return visitorReviewService.findVisitorReviewById(id);
+    public VisitorReviewResponseDTO findVisitorReviewById(@PathVariable Long visitorId, @PathVariable Long restaurantId) {
+        return visitorReviewService.findVisitorReviewById(visitorId, restaurantId);
     }
 
     @PostMapping
@@ -46,19 +46,20 @@ public class VisitorReviewController {
         return visitorReviewService.saveVisitorReview(requestDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/visitor/{visitorId}/restaurant/{restaurantId}")
     @Operation(summary = "Обновить отзыв", description = "Обновляет информацию об отзыве по его ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
     })
-    public VisitorReviewResponseDTO updateVisitorReview(@PathVariable Long id,@Valid @RequestBody VisitorReviewRequestDTO requestDTO) {
-        return visitorReviewService.updateVisitorReviewById(id, requestDTO);
+    public VisitorReviewResponseDTO updateVisitorReview(@PathVariable Long visitorId, @PathVariable Long restaurantId,
+                                                        @Valid @RequestBody VisitorReviewRequestDTO requestDTO) {
+        return visitorReviewService.updateVisitorReviewById(visitorId, restaurantId, requestDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/visitor/{visitorId}/restaurant/{restaurantId}")
     @Operation(summary = "Удалить отзыв", description = "Удаляет отзыв по его ID")
-    public void deleteVisitorReviewById(@PathVariable Long id) {
-        visitorReviewService.removeVisitorReview(id);
+    public void deleteVisitorReviewById(@PathVariable Long visitorId, @PathVariable Long restaurantId) {
+        visitorReviewService.removeVisitorReview(visitorId, restaurantId);
     }
 
 }

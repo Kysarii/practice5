@@ -1,22 +1,31 @@
 package com.restaurant.rating.entity;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.EqualsAndHashCode;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "id")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "visitor_review")
 public class VisitorReview {
-    private Long id;
-    @NonNull
-    private Long visitorId;
-    @NonNull
-    private Long restaurantId;
-    @NonNull
+    @EmbeddedId
+    private VisitorReviewId id;
+
+    @ManyToOne
+    @MapsId("visitorId")
+    @JoinColumn(name = "visitor_id", nullable = false)
+    private Visitor visitor;
+
+    @ManyToOne
+    @MapsId("restaurantId")
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    @Column(nullable = false)
     private Integer rating;
+
     private String review;
 }
