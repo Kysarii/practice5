@@ -2,9 +2,7 @@ package com.restaurant.rating.service;
 
 import com.restaurant.rating.dto.request.RestaurantRequestDTO;
 import com.restaurant.rating.dto.response.RestaurantResponseDTO;
-import com.restaurant.rating.dto.response.VisitorResponseDTO;
 import com.restaurant.rating.entity.Restaurant;
-import com.restaurant.rating.entity.Visitor;
 import com.restaurant.rating.entity.VisitorReview;
 import com.restaurant.rating.enums.KitchenType;
 import com.restaurant.rating.mapper.RestaurantMapper;
@@ -144,7 +142,8 @@ class RestaurantServiceTest {
         when(visitorReviewRepo.findByRestaurantId(id)).thenReturn(Collections.emptyList());
         when(restaurantRepo.findById(id)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> restaurantService.recalculateRating(id));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> restaurantService.recalculateRating(id));
         assertEquals("Ресторан с id: " + id + " не найден", exception.getMessage());
     }
 
@@ -171,7 +170,8 @@ class RestaurantServiceTest {
 
         when(restaurantRepo.findById(id)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> restaurantService.updateRating(id, newRating));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> restaurantService.updateRating(id, newRating));
 
         assertEquals("Ресторан с id: " + id + " не найден", exception.getMessage());
     }
@@ -195,7 +195,8 @@ class RestaurantServiceTest {
 
         when(restaurantRepo.findById(id)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> restaurantService.getRestaurantById(id));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> restaurantService.getRestaurantById(id));
 
         assertEquals("Ресторан с id: " + id + " не найден", exception.getMessage());
     }
@@ -235,7 +236,8 @@ class RestaurantServiceTest {
 
         when(restaurantRepo.findById(id)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> restaurantService.updateRestaurantById(id, requestDTO));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> restaurantService.updateRestaurantById(id, requestDTO));
 
         assertEquals("Ресторан с id: " + id + " не найден", exception.getMessage());
     }

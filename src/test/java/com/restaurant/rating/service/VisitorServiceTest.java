@@ -119,7 +119,8 @@ class VisitorServiceTest {
     void getVisitorByIdShouldReturnDtoWhenNotExists() {
         Long id = 1L;
         when(visitorRepo.findById(id)).thenReturn(Optional.empty());
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> visitorService.getVisitorById(id));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> visitorService.getVisitorById(id));
         assertEquals("Посетитель с id: " + id + " не найден", exception.getMessage());
     }
 
@@ -151,7 +152,8 @@ class VisitorServiceTest {
     void updateVisitorByIdShouldUpdateAndReturnDtoWhenNotExists() {
         Long id = 1L;
         when(visitorRepo.findById(id)).thenReturn(Optional.empty());
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> visitorService.updateVisitorById(id, requestDTO));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> visitorService.updateVisitorById(id, requestDTO));
         assertEquals("Посетитель с id: " + id + " не найден", exception.getMessage());
     }
 }
