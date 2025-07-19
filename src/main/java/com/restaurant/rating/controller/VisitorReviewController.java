@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/reviews")
 @Tag(name = "Управление отзывами посетителей", description = "API для управления отзывами посетителей")

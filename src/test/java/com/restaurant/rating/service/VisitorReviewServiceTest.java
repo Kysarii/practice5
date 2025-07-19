@@ -57,8 +57,8 @@ class VisitorReviewServiceTest {
     private VisitorReviewRequestDTO requestDTO;
     private VisitorReviewResponseDTO responseDTO;
     private VisitorReviewId visitorReviewId;
-    private Long visitorId = 1L;
-    private Long restaurantId = 1L;
+    private final Long visitorId = 1L;
+    private final Long restaurantId = 1L;
 
     @BeforeEach
     void setUp() {
