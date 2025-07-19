@@ -110,12 +110,15 @@ class VisitorReviewControllerTest {
 
     @Test
     void findVisitorReviewByIdShouldReturnNotFoundWhenNotExists() throws Exception{
+        String errorMessage = "Отзыв с visitorId: " + visitorId + " и restaurantId: " + restaurantId + " не найден";
         when(visitorReviewService.findVisitorReviewById(visitorId, restaurantId))
-                .thenThrow(new NoSuchElementException("Отзыв с visitorId: " + visitorId + " и restaurantId: " + restaurantId + " не найден"));
+                .thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/reviews/visitor/{visitorId}/restaurant/{restaurantId}", visitorId, restaurantId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -158,13 +161,16 @@ class VisitorReviewControllerTest {
 
     @Test
     void updateVisitorReviewShouldReturnNotFoundWhenReviewNotExists() throws Exception{
+        String errorMessage = "Отзыв с visitorId: " + visitorId + " и restaurantId: " + restaurantId + " не найден";
         when(visitorReviewService.updateVisitorReviewById(eq(visitorId), eq(restaurantId), any(VisitorReviewRequestDTO.class)))
-                .thenThrow(new NoSuchElementException("Отзыв с visitorId: " + visitorId + " и restaurantId: " + restaurantId + " не найден"));
+                .thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/reviews/visitor/{visitorId}/restaurant/{restaurantId}", visitorId, restaurantId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -188,11 +194,14 @@ class VisitorReviewControllerTest {
 
     @Test
     void deleteVisitorReviewShouldReturnNotFoundWhenReviewNotExists() throws Exception{
-        when(visitorReviewService.removeVisitorReview(visitorId, restaurantId)).thenReturn(false);
+        String errorMessage = "Отзыв с visitorId: " + visitorId + " и restaurantId: " + restaurantId + " не найден";
+        when(visitorReviewService.removeVisitorReview(visitorId, restaurantId)).thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/reviews/visitor/{visitorId}/restaurant/{restaurantId}", visitorId, restaurantId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test

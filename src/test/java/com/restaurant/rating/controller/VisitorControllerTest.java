@@ -86,12 +86,14 @@ class VisitorControllerTest {
 
     @Test
     void findVisitorByIdShouldReturnNotFoundWhenNotExists() throws Exception{
-        when(visitorService.getVisitorById(visitorId))
-                .thenThrow(new NoSuchElementException("Посетитель с id: " + visitorId + " не найден"));
+        String errorMessage = "Посетитель с id: " + visitorId + " не найден";
+        when(visitorService.getVisitorById(visitorId)).thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{id}", visitorId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -134,14 +136,16 @@ class VisitorControllerTest {
 
     @Test
     void updateVisitorShouldReturnNotFoundWhenVisitorNotExists() throws Exception{
+        String errorMessage = "Посетитель с id: " + visitorId + " не найден";
         when(visitorService.updateVisitorById(eq(visitorId), any(VisitorRequestDTO.class)))
-                .thenThrow(new NoSuchElementException("Посетитель с id: " + visitorId + " не найден"));
+                .thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/users/{id}", visitorId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isNotFound());
-        //
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -160,17 +164,18 @@ class VisitorControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/{id}", visitorId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        //
+                .andExpect(status().isNoContent());
     }
 
     @Test
     void deleteVisitorShouldReturnNotFoundWhenVisitorNotExists() throws Exception{
-        when(visitorService.removeVisitorById(visitorId)).thenReturn(false);
+        String errorMessage = "Посетитель с id: " + visitorId + " не найден";
+        when(visitorService.removeVisitorById(visitorId)).thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/{id}", visitorId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        //
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 }

@@ -92,12 +92,14 @@ class RestaurantControllerTest {
 
     @Test
     void getRestaurantByIdShouldReturnNotFoundWhenNotExists() throws Exception{
-        when(restaurantService.getRestaurantById(restaurantId))
-                .thenThrow(new NoSuchElementException("Ресторан с id: " + restaurantId + " не найден"));
+        String errorMessage = "Ресторан с id: " + restaurantId + " не найден";
+        when(restaurantService.getRestaurantById(restaurantId)).thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/restaurants/{id}", restaurantId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -144,13 +146,16 @@ class RestaurantControllerTest {
 
     @Test
     void updateRestaurantShouldReturnNotFoundWhenRestaurantNotExists() throws Exception{
+        String errorMessage = "Ресторан с id: " + restaurantId + " не найден";
         when(restaurantService.updateRestaurantById(eq(restaurantId), any(RestaurantRequestDTO.class)))
-                .thenThrow(new NoSuchElementException("Ресторан с id: " + restaurantId + " не найден"));
+                .thenThrow(new NoSuchElementException(errorMessage));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/restaurants/{id}", restaurantId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
     }
 
     @Test
@@ -174,11 +179,16 @@ class RestaurantControllerTest {
 
     @Test
     void deleteRestaurantShouldReturnNotFoundWhenRestaurantNotExists() throws Exception{
-        when(restaurantService.removeRestaurantById(restaurantId)).thenReturn(false);
+        String errorMessage = "Ресторан с id: " + restaurantId + " не найден";
+        when(restaurantService.removeRestaurantById(restaurantId)).thenThrow(new NoSuchElementException(errorMessage));
 
+        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/restaurants/{id}", restaurantId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(404))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(errorMessage));
+
     }
 
 }

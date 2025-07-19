@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/restaurants")
@@ -57,8 +59,12 @@ public class RestaurantController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить ресторан", description = "Удаляет ресторан по его ID")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRestaurant(@PathVariable Long id) {
-        restaurantService.removeRestaurantById(id);
+        boolean deleted = restaurantService.removeRestaurantById(id);
+        if (!deleted) {
+            throw new NoSuchElementException("Ресторан с id: " + id + " не найден");
+        }
     }
 
 }
