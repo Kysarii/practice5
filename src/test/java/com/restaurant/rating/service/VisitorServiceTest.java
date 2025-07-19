@@ -30,29 +30,29 @@ class VisitorServiceTest {
     private VisitorService visitorService;
 
     private Visitor visitor;
-    private VisitorRequestDTO visitorRequestDTO;
-    private VisitorResponseDTO visitorResponseDTO;
+    private VisitorRequestDTO requestDTO;
+    private VisitorResponseDTO responseDTO;
 
     @BeforeEach
     void setUp() {
-        visitorRequestDTO = new VisitorRequestDTO("Валентина", 25, Gender.FEMALE);
+        requestDTO = new VisitorRequestDTO("Валентина", 25, Gender.FEMALE);
         visitor = new Visitor();
         visitor.setId(1L);
         visitor.setName("Валентина");
         visitor.setAge(25);
         visitor.setGender(Gender.FEMALE);
 
-        visitorResponseDTO = new VisitorResponseDTO(1L, "Валентина", 25, Gender.FEMALE);
+        responseDTO = new VisitorResponseDTO(1L, "Валентина", 25, Gender.FEMALE);
     }
     @Test
     void saveVisitorShouldSaveAndReturnDto() {
-        when(visitorMapper.toEntity(visitorRequestDTO)).thenReturn(visitor);
+        when(visitorMapper.toEntity(requestDTO)).thenReturn(visitor);
         when(visitorRepo.save(visitor)).thenReturn(visitor);
-        when(visitorMapper.toDto(visitor)).thenReturn(visitorResponseDTO);
+        when(visitorMapper.toDto(visitor)).thenReturn(responseDTO);
 
-        VisitorResponseDTO result = visitorService.saveVisitor(visitorRequestDTO);
+        VisitorResponseDTO result = visitorService.saveVisitor(requestDTO);
 
-        assertEquals(visitorResponseDTO, result);
+        assertEquals(responseDTO, result);
         assertNotNull(result);
     }
 
@@ -78,8 +78,8 @@ class VisitorServiceTest {
 
     @Test
     void findAllVisitorsShouldReturnListOfDto() {
-        List<Visitor> visitorList = new ArrayList<>();
-        List<VisitorResponseDTO> visitorResponseDTOList = new ArrayList<>();
+        List<Visitor> visitorList = Collections.singletonList(visitor);
+        List<VisitorResponseDTO> visitorResponseDTOList = Collections.singletonList(responseDTO);
         when(visitorRepo.findAll()).thenReturn(visitorList);
         when(visitorMapper.toDtoList(visitorList)).thenReturn(visitorResponseDTOList);
 
@@ -87,6 +87,7 @@ class VisitorServiceTest {
 
         assertNotNull(result);
         assertEquals(visitorResponseDTOList, result);
+        assertEquals(1, result.size());
         assertEquals(visitorResponseDTOList.size(), result.size());
     }
 
@@ -106,12 +107,12 @@ class VisitorServiceTest {
     void getVisitorByIdShouldReturnDtoWhenExists() {
         Long id = 1L;
         when(visitorRepo.findById(id)).thenReturn(Optional.of(visitor));
-        when(visitorMapper.toDto(visitor)).thenReturn(visitorResponseDTO);
+        when(visitorMapper.toDto(visitor)).thenReturn(responseDTO);
 
         VisitorResponseDTO result = visitorService.getVisitorById(id);
 
         assertNotNull(result);
-        assertEquals(visitorResponseDTO, result);
+        assertEquals(responseDTO, result);
     }
 
     @Test
@@ -127,30 +128,30 @@ class VisitorServiceTest {
         Long id = 1L;
         Visitor updatedVisitor = new Visitor();
         updatedVisitor.setId(id);
-        updatedVisitor.setName(visitorRequestDTO.name());
-        updatedVisitor.setAge(visitorRequestDTO.age());
-        updatedVisitor.setGender(visitorRequestDTO.gender());
+        updatedVisitor.setName(requestDTO.name());
+        updatedVisitor.setAge(requestDTO.age());
+        updatedVisitor.setGender(requestDTO.gender());
 
-        VisitorResponseDTO updatedDto = new VisitorResponseDTO(id, visitorRequestDTO.name(), visitorRequestDTO.age(), visitorRequestDTO.gender());
+        VisitorResponseDTO updatedDto = new VisitorResponseDTO(id, requestDTO.name(), requestDTO.age(), requestDTO.gender());
 
         when(visitorRepo.findById(id)).thenReturn(Optional.of(visitor));
         when(visitorRepo.save(visitor)).thenReturn(updatedVisitor);
         when(visitorMapper.toDto(updatedVisitor)).thenReturn(updatedDto);
 
-        VisitorResponseDTO result = visitorService.updateVisitorById(id, visitorRequestDTO);
+        VisitorResponseDTO result = visitorService.updateVisitorById(id, requestDTO);
 
         assertNotNull(result);
         assertEquals(updatedDto, result);
-        assertEquals(visitorRequestDTO.name(), visitor.getName());
-        assertEquals(visitorRequestDTO.age(), visitor.getAge());
-        assertEquals(visitorRequestDTO.gender(), visitor.getGender());
+        assertEquals(requestDTO.name(), visitor.getName());
+        assertEquals(requestDTO.age(), visitor.getAge());
+        assertEquals(requestDTO.gender(), visitor.getGender());
     }
 
     @Test
     void updateVisitorByIdShouldUpdateAndReturnDtoWhenNotExists() {
         Long id = 1L;
         when(visitorRepo.findById(id)).thenReturn(Optional.empty());
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> visitorService.updateVisitorById(id,  visitorRequestDTO));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> visitorService.updateVisitorById(id, requestDTO));
         assertEquals("Посетитель с id: " + id + " не найден", exception.getMessage());
     }
 }
