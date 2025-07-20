@@ -21,7 +21,6 @@ public class VisitorService {
         this.visitorMapper = visitorMapper;
     }
 
-
     public VisitorResponseDTO saveVisitor(VisitorRequestDTO requestDTO) {
         Visitor visitor = visitorMapper.toEntity(requestDTO);
         Visitor saved = visitorRepo.save(visitor);

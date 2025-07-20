@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -57,8 +59,12 @@ public class VisitorController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить посетителя", description = "Удаляет посетителя по его ID")
-    public void deleteVisitor(@PathVariable Long  id) {
-        visitorService.removeVisitorById(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteVisitor(@PathVariable Long id) {
+        boolean deleted = visitorService.removeVisitorById(id);
+        if (!deleted) {
+            throw new NoSuchElementException("Посетитель с id: " + id + " не найден");
+        }
     }
 
 }

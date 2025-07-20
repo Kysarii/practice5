@@ -13,12 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -66,8 +67,12 @@ public class VisitorReviewController {
 
     @DeleteMapping("/visitor/{visitorId}/restaurant/{restaurantId}")
     @Operation(summary = "Удалить отзыв", description = "Удаляет отзыв по его ID")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteVisitorReviewById(@PathVariable Long visitorId, @PathVariable Long restaurantId) {
-        visitorReviewService.removeVisitorReview(visitorId, restaurantId);
+        boolean deleted = visitorReviewService.removeVisitorReview(visitorId, restaurantId);
+        if (!deleted) {
+            throw new NoSuchElementException("Отзыв с visitorId: " + visitorId + " и restaurantId: " + restaurantId + " не найден");
+        }
     }
 
     @GetMapping("/restaurants-by-min-rating")
