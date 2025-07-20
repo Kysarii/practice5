@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -182,7 +181,6 @@ class RestaurantControllerTest {
         String errorMessage = "Ресторан с id: " + restaurantId + " не найден";
         when(restaurantService.removeRestaurantById(restaurantId)).thenThrow(new NoSuchElementException(errorMessage));
 
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/restaurants/{id}", restaurantId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
